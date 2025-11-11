@@ -1,0 +1,400 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Preparación para el Examen</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f4f7f6;
+            color: #333;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            min-height: 100vh;
+            box-sizing: border-box;
+        }
+        .container {
+            background-color: #ffffff;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            padding: 25px;
+            max-width: 600px;
+            width: 100%;
+            text-align: center;
+            margin-top: 20px;
+            border: 1px solid #e0e0e0;
+        }
+        h1 {
+            color: #2c3e50;
+            margin-bottom: 25px;
+            font-size: 1.8em;
+        }
+        .question-card {
+            background-color: #e8f5e9;
+            border-left: 5px solid #4CAF50;
+            padding: 20px;
+            margin-bottom: 25px;
+            border-radius: 8px;
+            text-align: left;
+            font-size: 1.1em;
+            line-height: 1.6;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+        .options {
+            list-style: none;
+            padding: 0;
+            margin-top: 20px;
+        }
+        .options li {
+            margin-bottom: 12px;
+        }
+        .options button {
+            background-color: #f0f0f0;
+            border: 1px solid #ddd;
+            color: #444;
+            padding: 12px 20px;
+            width: 100%;
+            text-align: left;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1em;
+            transition: background-color 0.3s, border-color 0.3s, color 0.3s;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        .options button:hover {
+            background-color: #e0e0e0;
+            border-color: #ccc;
+        }
+        .options button.selected {
+            border-color: #2196F3;
+            box-shadow: 0 0 0 3px rgba(33, 150, 243, 0.3);
+        }
+        .options button.correct {
+            background-color: #d4edda;
+            border-color: #28a745;
+            color: #155724;
+            font-weight: bold;
+        }
+        .options button.incorrect {
+            background-color: #f8d7da;
+            border-color: #dc3545;
+            color: #721c24;
+            font-weight: bold;
+        }
+        .feedback {
+            margin-top: 20px;
+            padding: 15px;
+            border-radius: 8px;
+            font-size: 1em;
+            text-align: left;
+            display: none; /* Oculto por defecto */
+        }
+        .feedback.correct {
+            background-color: #d4edda;
+            border: 1px solid #28a745;
+            color: #155724;
+        }
+        .feedback.incorrect {
+            background-color: #f8d7da;
+            border: 1px solid #dc3545;
+            color: #721c24;
+        }
+        .navigation-buttons {
+            margin-top: 25px;
+            display: flex;
+            justify-content: space-between;
+            gap: 15px;
+        }
+        .navigation-buttons button {
+            padding: 12px 25px;
+            font-size: 1em;
+            border-radius: 8px;
+            cursor: pointer;
+            border: none;
+            transition: background-color 0.3s, transform 0.2s;
+            flex-grow: 1;
+            box-shadow: 0 3px 8px rgba(0,0,0,0.1);
+        }
+        .navigation-buttons #submit-btn {
+            background-color: #28a745;
+            color: white;
+        }
+        .navigation-buttons #submit-btn:hover {
+            background-color: #218838;
+            transform: translateY(-2px);
+        }
+        .navigation-buttons #next-btn {
+            background-color: #007bff;
+            color: white;
+        }
+        .navigation-buttons #next-btn:hover {
+            background-color: #0056b3;
+            transform: translateY(-2px);
+        }
+        #success-message {
+            background-color: #d4edda;
+            border: 2px solid #28a745;
+            color: #155724;
+            padding: 30px;
+            border-radius: 12px;
+            margin-top: 30px;
+            font-size: 1.5em;
+            font-weight: bold;
+            display: none;
+            animation: fadeIn 0.8s ease-out;
+            box-shadow: 0 6px 15px rgba(40, 167, 69, 0.2);
+        }
+        #progress-bar {
+            width: 100%;
+            background-color: #e0e0e0;
+            border-radius: 5px;
+            margin-top: 20px;
+            height: 10px;
+            overflow: hidden;
+        }
+        #progress {
+            height: 100%;
+            width: 0%;
+            background-color: #4CAF50;
+            border-radius: 5px;
+            transition: width 0.5s ease-in-out;
+        }
+        .check-icon {
+            margin-left: 10px;
+            color: #28a745;
+            font-size: 1.2em;
+        }
+        .cross-icon {
+            margin-left: 10px;
+            color: #dc3545;
+            font-size: 1.2em;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Responsive adjustments for smaller screens */
+        @media (max-width: 600px) {
+            body {
+                padding: 15px;
+            }
+            .container {
+                margin-top: 10px;
+                padding: 18px;
+            }
+            h1 {
+                font-size: 1.5em;
+                margin-bottom: 20px;
+            }
+            .question-card {
+                padding: 15px;
+                font-size: 1em;
+            }
+            .options button {
+                font-size: 0.95em;
+                padding: 10px 15px;
+            }
+            .navigation-buttons {
+                flex-direction: column;
+                gap: 10px;
+            }
+            .navigation-buttons button {
+                width: 100%;
+                padding: 10px 15px;
+            }
+            #success-message {
+                font-size: 1.2em;
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Preparación para el Examen</h1>
+
+        <div id="quiz-content">
+            <div id="progress-bar"><div id="progress"></div></div>
+            <div class="question-card">
+                <p id="question-text"></p>
+            </div>
+            <ul id="options-list" class="options"></ul>
+
+            <div id="feedback" class="feedback"></div>
+
+            <div class="navigation-buttons">
+                <button id="submit-btn">Comprobar Respuesta</button>
+                <button id="next-btn" style="display: none;">Siguiente Pregunta</button>
+            </div>
+        </div>
+
+        <div id="success-message" style="display: none;">
+            🎉 ¡Felicidades! Has respondido todas las preguntas correctamente. ¡Estás listo para el examen!
+        </div>
+    </div>
+
+    <script>
+        const questions = [
+            {
+                question: "¿Cuál es la capital de Francia?",
+                options: ["Londres", "Berlín", "París", "Roma"],
+                answer: "París"
+            },
+            {
+                question: "¿Qué planeta es conocido como el Planeta Rojo?",
+                options: ["Júpiter", "Marte", "Venus", "Saturno"],
+                answer: "Marte"
+            },
+            {
+                question: "¿Quién escribió 'Don Quijote de la Mancha'?",
+                options: ["Federico García Lorca", "Miguel de Cervantes", "Gabriel García Márquez", "Antonio Machado"],
+                answer: "Miguel de Cervantes"
+            },
+            {
+                question: "¿Cuál es el océano más grande del mundo?",
+                options: ["Atlántico", "Índico", "Ártico", "Pacífico"],
+                answer: "Pacífico"
+            },
+            {
+                question: "¿Cuántos continentes hay en la Tierra?",
+                options: ["5", "6", "7", "8"],
+                answer: "7"
+            }
+        ];
+
+        let availableQuestions = [...questions]; // Preguntas pendientes por responder correctamente
+        let currentQuestion = null;
+        let selectedOption = null;
+        let correctQuestionsCount = 0;
+
+        const questionTextElement = document.getElementById('question-text');
+        const optionsListElement = document.getElementById('options-list');
+        const feedbackElement = document.getElementById('feedback');
+        const submitButton = document.getElementById('submit-btn');
+        const nextButton = document.getElementById('next-btn');
+        const successMessage = document.getElementById('success-message');
+        const quizContent = document.getElementById('quiz-content');
+        const progressBar = document.getElementById('progress');
+
+        function updateProgressBar() {
+            const totalQuestions = questions.length;
+            const progressPercentage = (correctQuestionsCount / totalQuestions) * 100;
+            progressBar.style.width = `${progressPercentage}%`;
+        }
+
+        function loadQuestion() {
+            if (availableQuestions.length === 0) {
+                showSuccessMessage();
+                return;
+            }
+
+            // Si es la primera carga o ya hemos respondido la pregunta anterior
+            if (!currentQuestion || currentQuestion.answeredCorrectly) {
+                const randomIndex = Math.floor(Math.random() * availableQuestions.length);
+                currentQuestion = availableQuestions[randomIndex];
+            }
+            
+            questionTextElement.textContent = currentQuestion.question;
+            optionsListElement.innerHTML = '';
+            feedbackElement.style.display = 'none';
+            feedbackElement.className = 'feedback'; // Resetear clases de feedback
+            submitButton.style.display = 'block';
+            nextButton.style.display = 'none';
+            selectedOption = null;
+
+            currentQuestion.options.forEach((option, index) => {
+                const listItem = document.createElement('li');
+                const button = document.createElement('button');
+                button.textContent = option;
+                button.setAttribute('data-index', index);
+                button.addEventListener('click', () => selectOption(button, option));
+                listItem.appendChild(button);
+                optionsListElement.appendChild(listItem);
+            });
+            updateProgressBar();
+        }
+
+        function selectOption(button, option) {
+            // Remover 'selected' de todos los botones
+            document.querySelectorAll('#options-list button').forEach(btn => {
+                btn.classList.remove('selected');
+            });
+
+            // Añadir 'selected' al botón clicado
+            button.classList.add('selected');
+            selectedOption = option;
+        }
+
+        function checkAnswer() {
+            if (selectedOption === null) {
+                alert('Por favor, selecciona una respuesta.');
+                return;
+            }
+
+            // Desactivar botones de opciones
+            document.querySelectorAll('#options-list button').forEach(btn => {
+                btn.disabled = true;
+                if (btn.textContent === currentQuestion.answer) {
+                    btn.classList.add('correct');
+                    btn.innerHTML += ' <span class="check-icon">✔</span>';
+                } else if (btn.textContent === selectedOption) {
+                    btn.classList.add('incorrect');
+                    btn.innerHTML += ' <span class="cross-icon">✖</span>';
+                }
+            });
+
+            submitButton.style.display = 'none'; // Ocultar botón de comprobar
+
+            if (selectedOption === currentQuestion.answer) {
+                feedbackElement.textContent = '¡Correcto!';
+                feedbackElement.className = 'feedback correct';
+                currentQuestion.answeredCorrectly = true;
+
+                // Remover la pregunta de las preguntas disponibles
+                availableQuestions = availableQuestions.filter(q => q.question !== currentQuestion.question);
+                correctQuestionsCount++;
+                updateProgressBar();
+
+                nextButton.textContent = 'Siguiente Pregunta'; // Cambiar texto a Siguiente Pregunta
+                nextButton.style.display = 'block';
+            } else {
+                feedbackElement.textContent = `Incorrecto. La respuesta correcta era: "${currentQuestion.answer}"`;
+                feedbackElement.className = 'feedback incorrect';
+                currentQuestion.answeredCorrectly = false; // Marcar como incorrecta
+                
+                // Si ya está en la lista de disponibles, no hacer nada. Si no, volver a añadirla.
+                const exists = availableQuestions.some(q => q.question === currentQuestion.question);
+                if (!exists) {
+                    availableQuestions.push(currentQuestion);
+                }
+
+                nextButton.textContent = 'Intentar de Nuevo'; // Cambiar texto a Intentar de Nuevo
+                nextButton.style.display = 'block';
+            }
+            feedbackElement.style.display = 'block';
+        }
+
+        function showSuccessMessage() {
+            quizContent.style.display = 'none';
+            successMessage.style.display = 'block';
+        }
+
+        submitButton.addEventListener('click', checkAnswer);
+        nextButton.addEventListener('click', () => {
+            currentQuestion = null; // Para que elija una nueva pregunta al azar (o la misma si se falló)
+            loadQuestion();
+        });
+
+        // Inicializar la aplicación
+        loadQuestion();
+    </script>
+</body>
+</html>
