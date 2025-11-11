@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Preparación para el Examen</title>
+    <title>Aprendizaje y Desarrollo de la Personalidad</title>
     <style>
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -122,14 +122,6 @@
             flex-grow: 1;
             box-shadow: 0 3px 8px rgba(0,0,0,0.1);
         }
-        .navigation-buttons #submit-btn {
-            background-color: #28a745;
-            color: white;
-        }
-        .navigation-buttons #submit-btn:hover {
-            background-color: #218838;
-            transform: translateY(-2px);
-        }
         .navigation-buttons #next-btn {
             background-color: #007bff;
             color: white;
@@ -219,7 +211,7 @@
 </head>
 <body>
     <div class="container">
-        <h1>Preparación para el Examen</h1>
+        <h1>Aprendizaje y Desarrollo de la Personalidad</h1>
 
         <div id="quiz-content">
             <div id="progress-bar"><div id="progress"></div></div>
@@ -231,7 +223,6 @@
             <div id="feedback" class="feedback"></div>
 
             <div class="navigation-buttons">
-                <button id="submit-btn">Comprobar Respuesta</button>
                 <button id="next-btn" style="display: none;">Siguiente Pregunta</button>
             </div>
         </div>
@@ -278,7 +269,6 @@
         const questionTextElement = document.getElementById('question-text');
         const optionsListElement = document.getElementById('options-list');
         const feedbackElement = document.getElementById('feedback');
-        const submitButton = document.getElementById('submit-btn');
         const nextButton = document.getElementById('next-btn');
         const successMessage = document.getElementById('success-message');
         const quizContent = document.getElementById('quiz-content');
@@ -306,7 +296,6 @@
             optionsListElement.innerHTML = '';
             feedbackElement.style.display = 'none';
             feedbackElement.className = 'feedback'; // Resetear clases de feedback
-            submitButton.style.display = 'block';
             nextButton.style.display = 'none';
             selectedOption = null;
 
@@ -331,13 +320,12 @@
             // Añadir 'selected' al botón clicado
             button.classList.add('selected');
             selectedOption = option;
+            
+            // Comprobar la respuesta automáticamente
+            checkAnswer();
         }
 
         function checkAnswer() {
-            if (selectedOption === null) {
-                alert('Por favor, selecciona una respuesta.');
-                return;
-            }
 
             // Desactivar botones de opciones
             document.querySelectorAll('#options-list button').forEach(btn => {
@@ -350,8 +338,6 @@
                     btn.innerHTML += ' <span class="cross-icon">✖</span>';
                 }
             });
-
-            submitButton.style.display = 'none'; // Ocultar botón de comprobar
 
             if (selectedOption === currentQuestion.answer) {
                 feedbackElement.textContent = '¡Correcto!';
@@ -376,7 +362,7 @@
                     availableQuestions.push(currentQuestion);
                 }
 
-                nextButton.textContent = 'Intentar de Nuevo'; // Cambiar texto a Intentar de Nuevo
+                nextButton.textContent = 'Siguiente Pregunta'; // Cambiar texto a Intentar de Nuevo
                 nextButton.style.display = 'block';
             }
             feedbackElement.style.display = 'block';
@@ -387,7 +373,6 @@
             successMessage.style.display = 'block';
         }
 
-        submitButton.addEventListener('click', checkAnswer);
         nextButton.addEventListener('click', () => {
             currentQuestion = null; // Para que elija una nueva pregunta al azar (o la misma si se falló)
             loadQuestion();
@@ -398,3 +383,4 @@
     </script>
 </body>
 </html>
+
